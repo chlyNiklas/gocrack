@@ -1,6 +1,8 @@
 package pool
 
-import "context"
+import (
+	"context"
+)
 
 type Pool struct {
 	sample []rune
@@ -8,7 +10,10 @@ type Pool struct {
 
 	maxWorkers int
 	blocksize  int
+	n          int
 
 	ctx    context.Context
 	cancel context.CancelFunc
+
+	lg *logger
 }

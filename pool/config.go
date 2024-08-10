@@ -55,3 +55,7 @@ func (p *Pool) SetBlocksize(blocksize int) (err error) {
 	return nil
 
 }
+
+func (p *Pool) GetNumberOfHashesChecked() int {
+	return p.n * p.blocksize
+}

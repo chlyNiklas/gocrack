@@ -35,7 +35,9 @@ func main() {
 	log.Println("With chars:", string(a.Sample))
 
 	fmt.Printf("%s: %s \n", hex.EncodeToString(a.Hash[:]), workerPool.Crack())
-	fmt.Printf("Cracked in %s\n", time.Now().Sub(tStart))
+	timeTaken := time.Now().Sub(tStart)
+	fmt.Printf("Cracked in %s\n", timeTaken)
+	fmt.Printf("With %.0f hashes/second\n", float64(workerPool.GetNumberOfHashesChecked())/timeTaken.Seconds())
 }
 
 func GetArgs() (a args, err error) {

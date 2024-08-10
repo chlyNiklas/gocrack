@@ -3,7 +3,6 @@ package pool
 import (
 	"context"
 	"log"
-	"unicode/utf8"
 
 	"github.com/chlyniklas/gocrack/solver"
 )
@@ -17,6 +16,8 @@ func (p *Pool) Crack() string {
 	jobs := make(chan job, 10)
 	result := make(chan string)
 
+	p.lg = newLogger()
+
 	p.ctx, p.cancel = context.WithCancel(context.Background())
 
 	go p.employer(jobs)
@@ -27,7 +28,10 @@ func (p *Pool) Crack() string {
 
 	log.Printf("Created %d workers with block size: %d", p.maxWorkers, p.blocksize)
 
-	return <-result
+	res := <-result
+
+	p.lg.Close()
+	return res
 }
 
 func (p *Pool) worker(jobs <-chan job, result chan<- string) {
@@ -60,8 +64,7 @@ func (p *Pool) loggingWorker(jobs <-chan job, result chan<- string) {
 	for {
 		select {
 		case j := <-jobs:
-			str := s.CreateUniqueString(j.from)
-			log.Printf("Digits: %d \t %s", utf8.RuneCountInString(str), str)
+			p.lg.log(s.CreateUniqueString(j.from))
 			for i := j.from; i < j.to; i++ {
 				password, ok := s.CheckStringAtPosition(i)
 				// log.Println(password)
@@ -85,6 +88,7 @@ func (p *Pool) employer(jobs chan<- job) {
 			return
 		default:
 			from := i * p.blocksize
+			p.n = from
 			jobs <- job{from, from + p.blocksize}
 		}
 	}
