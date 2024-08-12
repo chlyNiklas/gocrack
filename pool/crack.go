@@ -20,8 +20,9 @@ func (p *Pool) Crack() string {
 	// }
 	// pprof.StartCPUProfile(f)
 	// defer pprof.StopCPUProfile()
-	// jobs := make(chan job)
-	// result := make(chan string)
+
+	jobs := make(chan job)
+	result := make(chan string)
 
 	p.lg = newLogger()
 
