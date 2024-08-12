@@ -44,7 +44,7 @@ func main() {
 func GetArgs() (a args, err error) {
 
 	flag.IntVar(&a.MaxWorkers, "workers", 0, "")
-	flag.IntVar(&a.Blocksize, "blocksize", 5000, "")
+	flag.IntVar(&a.Blocksize, "blocksize", 0, "")
 	sampleString := flag.String("sample", "abcdefghijklmnopqrstuvwxyz", "")
 
 	flag.Parse()

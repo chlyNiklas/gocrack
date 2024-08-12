@@ -10,7 +10,7 @@ func New(sample []rune, hash [16]byte) *Pool {
 		sample:     sample,
 		hash:       hash,
 		maxWorkers: runtime.NumCPU() * 3,
-		blocksize:  runtime.NumCPU() * 100,
+		blocksize:  50000,
 	}
 }
 
