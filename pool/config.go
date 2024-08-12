@@ -3,14 +3,17 @@ package pool
 import (
 	"errors"
 	"runtime"
+
+	"github.com/chlyniklas/gocrack/solver"
 )
 
-func New(sample []rune, hash [16]byte) *Pool {
+func New(sample []rune, checkFunction solver.CheckFunction) *Pool {
 	return &Pool{
-		sample:     sample,
-		hash:       hash,
-		maxWorkers: runtime.NumCPU() * 3,
-		blocksize:  50000,
+		sample:        sample,
+		maxWorkers:    runtime.NumCPU() * 3,
+		blocksize:     50000,
+		logging:       true,
+		checkFunction: checkFunction,
 	}
 }
 
@@ -28,10 +31,6 @@ func (p *Pool) ConfigureWorkers(maxWorkers, blocksize int) (err error) {
 	return nil
 }
 
-func (p *Pool) SetHash(hash [16]byte) {
-	p.hash = hash
-}
-
 func (p *Pool) SetSample(sample []rune) {
 	p.sample = sample
 }
@@ -45,6 +44,10 @@ func (p *Pool) SetMaxWorkers(maxWorkers int) (err error) {
 	return nil
 
 }
+func (p *Pool) SetLogging(enabled bool) {
+	p.logging = enabled
+}
+
 func (p *Pool) SetBlocksize(blocksize int) (err error) {
 	if blocksize <= 0 {
 		return errors.New("blocksize must be grater than 0")

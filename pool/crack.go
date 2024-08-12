@@ -13,18 +13,10 @@ type job struct {
 }
 
 func (p *Pool) Crack() string {
-	// // Profiling
-	// f, err := os.Create(time.Now().Format("2006-01-02-15-04") + "_crack.prof")
-	// if err != nil {
-	// 	return err.Error()
-	// }
-	// pprof.StartCPUProfile(f)
-	// defer pprof.StopCPUProfile()
-
 	jobs := make(chan job)
 	result := make(chan string)
 
-	p.lg = newLogger()
+	p.lg = newLogger(p.logging)
 
 	p.ctx, p.cancel = context.WithCancel(context.Background())
 
@@ -34,7 +26,9 @@ func (p *Pool) Crack() string {
 	}
 	go p.loggingWorker(jobs, result)
 
-	log.Printf("Created %d workers with block size: %d", p.maxWorkers, p.blocksize)
+	if p.logging {
+		log.Printf("Created %d workers with block size: %d", p.maxWorkers, p.blocksize)
+	}
 
 	res := <-result
 
@@ -44,14 +38,13 @@ func (p *Pool) Crack() string {
 }
 
 func (p *Pool) worker(jobs <-chan job, result chan<- string) {
-	s := solver.New(p.sample, p.hash)
+	s := solver.New(p.sample, p.checkFunction)
 	for {
 		select {
 		case j := <-jobs:
 			// test the block given by the job
 			for i := j.from; i < j.to; i++ {
 				password, ok := s.CheckStringAtPosition(i)
-				// log.Println(password)
 				if ok {
 					result <- password
 					return
@@ -67,7 +60,7 @@ func (p *Pool) worker(jobs <-chan job, result chan<- string) {
 
 func (p *Pool) loggingWorker(jobs <-chan job, result chan<- string) {
 
-	s := solver.New(p.sample, p.hash)
+	s := solver.New(p.sample, p.checkFunction)
 
 	for {
 		select {

@@ -2,11 +2,13 @@ package pool
 
 import (
 	"context"
+
+	"github.com/chlyniklas/gocrack/solver"
 )
 
 type Pool struct {
-	sample []rune
-	hash   [16]byte
+	sample        []rune
+	checkFunction solver.CheckFunction
 
 	maxWorkers int
 	blocksize  int
@@ -15,5 +17,6 @@ type Pool struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
-	lg *logger
+	lg      *logger
+	logging bool
 }

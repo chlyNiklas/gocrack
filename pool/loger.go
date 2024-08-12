@@ -7,17 +7,23 @@ import (
 
 type logger struct {
 	logChan chan string
+	enabled bool
 }
 
 func (l logger) Close() {
 	close(l.logChan)
-	fmt.Printf("\n")
+	if l.enabled {
+		fmt.Printf("\n")
+	}
 }
-func newLogger() *logger {
+func newLogger(enabled bool) *logger {
 	l := &logger{
 		make(chan string, 10),
+		enabled,
 	}
-	go l.logRutine()
+	if enabled {
+		go l.logRutine()
+	}
 
 	return l
 }
@@ -29,5 +35,8 @@ func (l *logger) logRutine() {
 }
 
 func (l *logger) log(msg string) {
-	l.logChan <- msg
+	if l.enabled {
+		l.logChan <- msg
+
+	}
 }

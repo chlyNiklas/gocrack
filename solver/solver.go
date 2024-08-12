@@ -1,24 +1,24 @@
 package solver
 
-import (
-	"crypto/md5"
-)
+import ()
+
+type CheckFunction func([]byte) bool
 
 type Solver struct {
-	sample []rune
-	hash   [16]byte
+	sample        []rune
+	checkFunction CheckFunction
 }
 
-func New(sample []rune, hash [16]byte) *Solver {
+func New(sample []rune, checkFunction CheckFunction) *Solver {
 	return &Solver{
 		sample,
-		hash,
+		checkFunction,
 	}
 }
 
 func (s *Solver) CheckStringAtPosition(pos int) (str string, ok bool) {
 	str = s.CreateUniqueString(pos)
-	if s.hash == md5.Sum([]byte(str)) {
+	if s.checkFunction([]byte(str)) {
 		return str, true
 	}
 	return str, false
