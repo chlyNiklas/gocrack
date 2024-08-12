@@ -2,7 +2,6 @@ package solver
 
 import (
 	"crypto/md5"
-	"math"
 )
 
 type Solver struct {
@@ -28,7 +27,7 @@ func (s *Solver) CheckStringAtPosition(pos int) (str string, ok bool) {
 func (s *Solver) CreateUniqueString(pos int) string {
 	nDigits := s.digits(pos)
 
-	var pwd []rune
+	pwd := make([]rune, 0, nDigits)
 	for range nDigits {
 		pwd = append(pwd, s.sample[pos%len(s.sample)])
 		pos = pos / len(s.sample)
@@ -38,8 +37,10 @@ func (s *Solver) CreateUniqueString(pos int) string {
 
 func (s *Solver) digits(pos int) int {
 	var sum int
+	lastPow := 1
 	for i := 1; true; i++ {
-		sum += int(math.Pow(float64(len(s.sample)), float64(i)))
+		lastPow *= len(s.sample)
+		sum += lastPow
 		if sum > pos {
 			return i
 		}

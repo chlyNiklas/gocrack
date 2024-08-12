@@ -37,7 +37,8 @@ func main() {
 	fmt.Printf("%s: %s \n", hex.EncodeToString(a.Hash[:]), workerPool.Crack())
 	timeTaken := time.Now().Sub(tStart)
 	fmt.Printf("Cracked in %s\n", timeTaken)
-	fmt.Printf("With %.0f hashes/second\n", float64(workerPool.GetNumberOfHashesChecked())/timeTaken.Seconds())
+	// fmt.Printf("With %.0f hashes/second\n", float64(workerPool.GetNumberOfHashesChecked())/timeTaken.Seconds())
+	fmt.Printf("With %.5v hashes/second\n", float64(workerPool.GetNumberOfHashesChecked())/timeTaken.Seconds())
 }
 
 func GetArgs() (a args, err error) {
@@ -47,6 +48,8 @@ func GetArgs() (a args, err error) {
 	sampleString := flag.String("sample", "abcdefghijklmnopqrstuvwxyz", "")
 
 	flag.Parse()
+
+	log.Println(a.MaxWorkers)
 
 	a.Sample = []rune(*sampleString)
 

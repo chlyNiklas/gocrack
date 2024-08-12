@@ -13,8 +13,15 @@ type job struct {
 }
 
 func (p *Pool) Crack() string {
-	jobs := make(chan job, 10)
-	result := make(chan string)
+	// // Profiling
+	// f, err := os.Create(time.Now().Format("2006-01-02-15-04") + "_crack.prof")
+	// if err != nil {
+	// 	return err.Error()
+	// }
+	// pprof.StartCPUProfile(f)
+	// defer pprof.StopCPUProfile()
+	// jobs := make(chan job)
+	// result := make(chan string)
 
 	p.lg = newLogger()
 
@@ -30,6 +37,7 @@ func (p *Pool) Crack() string {
 
 	res := <-result
 
+	p.cancel()
 	p.lg.Close()
 	return res
 }
@@ -45,7 +53,6 @@ func (p *Pool) worker(jobs <-chan job, result chan<- string) {
 				// log.Println(password)
 				if ok {
 					result <- password
-					p.cancel()
 					return
 				}
 			}
@@ -70,7 +77,6 @@ func (p *Pool) loggingWorker(jobs <-chan job, result chan<- string) {
 				// log.Println(password)
 				if ok {
 					result <- password
-					p.cancel()
 					return
 				}
 			}
@@ -78,7 +84,6 @@ func (p *Pool) loggingWorker(jobs <-chan job, result chan<- string) {
 			return
 		}
 	}
-
 }
 
 func (p *Pool) employer(jobs chan<- job) {
