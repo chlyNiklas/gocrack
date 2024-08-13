@@ -6,7 +6,7 @@ import (
 )
 
 func Test_CreateNewString_CreatesAllStrings(t *testing.T) {
-	set := []rune("abc")
+	set := []byte("abc")
 	wants := []string{
 		"a",
 		"b",
@@ -29,7 +29,7 @@ func Test_CreateNewString_CreatesAllStrings(t *testing.T) {
 	results := make([]string, 0, len(wants))
 
 	for i := range len(wants) {
-		results = append(results, s.CreateUniqueString(i))
+		results = append(results, string(s.CreateUniqueCombination(i)))
 	}
 	for _, want := range wants {
 		if !slices.Contains(results, want) {

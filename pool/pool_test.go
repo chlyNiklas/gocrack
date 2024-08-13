@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var sample []rune = []rune("abcdefghijklmnopqrstuvwxyz")
+var sample []byte = []byte("abcdefghijklmnopqrstuvwxyz")
 
 func Benchmark_CrackDefault(b *testing.B) {
 	var hash [16]byte = md5.Sum([]byte("psswrd"))

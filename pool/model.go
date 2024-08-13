@@ -7,7 +7,7 @@ import (
 )
 
 type Pool struct {
-	sample        []rune
+	charSet       []byte
 	checkFunction solver.CheckFunction
 
 	maxWorkers int

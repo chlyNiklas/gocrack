@@ -5,34 +5,35 @@ import ()
 type CheckFunction func([]byte) bool
 
 type Solver struct {
-	sample        []rune
+	// the sample is a byte-slice so that the program has to do less conversions between datatype
+	sample        []byte
 	checkFunction CheckFunction
 }
 
-func New(sample []rune, checkFunction CheckFunction) *Solver {
+func New(sample []byte, checkFunction CheckFunction) *Solver {
 	return &Solver{
 		sample,
 		checkFunction,
 	}
 }
 
-func (s *Solver) CheckStringAtPosition(pos int) (str string, ok bool) {
-	str = s.CreateUniqueString(pos)
-	if s.checkFunction([]byte(str)) {
+func (s *Solver) CheckCombinationAtPosition(pos int) (str []byte, ok bool) {
+	str = s.CreateUniqueCombination(pos)
+	if s.checkFunction(s.CreateUniqueCombination(pos)) {
 		return str, true
 	}
 	return str, false
 }
 
-func (s *Solver) CreateUniqueString(pos int) string {
+func (s *Solver) CreateUniqueCombination(pos int) []byte {
 	nDigits := s.digits(pos)
 
-	pwd := make([]rune, 0, nDigits)
+	pwd := make([]byte, 0, nDigits)
 	for range nDigits {
 		pwd = append(pwd, s.sample[pos%len(s.sample)])
 		pos = pos / len(s.sample)
 	}
-	return string(pwd)
+	return pwd
 }
 
 func (s *Solver) digits(pos int) int {

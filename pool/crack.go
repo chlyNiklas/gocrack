@@ -38,15 +38,15 @@ func (p *Pool) Crack() string {
 }
 
 func (p *Pool) worker(jobs <-chan job, result chan<- string) {
-	s := solver.New(p.sample, p.checkFunction)
+	s := solver.New(p.charSet, p.checkFunction)
 	for {
 		select {
 		case j := <-jobs:
 			// test the block given by the job
 			for i := j.from; i < j.to; i++ {
-				password, ok := s.CheckStringAtPosition(i)
+				password, ok := s.CheckCombinationAtPosition(i)
 				if ok {
-					result <- password
+					result <- string(password)
 					return
 				}
 			}
@@ -60,17 +60,17 @@ func (p *Pool) worker(jobs <-chan job, result chan<- string) {
 
 func (p *Pool) loggingWorker(jobs <-chan job, result chan<- string) {
 
-	s := solver.New(p.sample, p.checkFunction)
+	s := solver.New(p.charSet, p.checkFunction)
 
 	for {
 		select {
 		case j := <-jobs:
-			p.lg.log(s.CreateUniqueString(j.from))
+			p.lg.log(string(s.CreateUniqueCombination(j.from)))
 			for i := j.from; i < j.to; i++ {
-				password, ok := s.CheckStringAtPosition(i)
+				password, ok := s.CheckCombinationAtPosition(i)
 				// log.Println(password)
 				if ok {
-					result <- password
+					result <- string(password)
 					return
 				}
 			}

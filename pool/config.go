@@ -7,9 +7,9 @@ import (
 	"github.com/chlyniklas/gocrack/solver"
 )
 
-func New(sample []rune, checkFunction solver.CheckFunction) *Pool {
+func New(charSet []byte, checkFunction solver.CheckFunction) *Pool {
 	return &Pool{
-		sample:        sample,
+		charSet:       charSet,
 		maxWorkers:    runtime.NumCPU() * 3,
 		blocksize:     50000,
 		logging:       true,
@@ -17,22 +17,9 @@ func New(sample []rune, checkFunction solver.CheckFunction) *Pool {
 	}
 }
 
-func (p *Pool) ConfigureWorkers(maxWorkers, blocksize int) (err error) {
-	if maxWorkers <= 0 {
-		return errors.New("maxWorkers must be grater than 0")
-	}
-	if blocksize <= 0 {
-		return errors.New("blocksize must be grater than 0")
-	}
-
-	p.blocksize = blocksize
-	p.maxWorkers = maxWorkers
-
-	return nil
-}
-
-func (p *Pool) SetSample(sample []rune) {
-	p.sample = sample
+// Set's the rune set
+func (p *Pool) SetRuneSet(charSet []byte) {
+	p.charSet = charSet
 }
 func (p *Pool) SetMaxWorkers(maxWorkers int) (err error) {
 	if maxWorkers <= 0 {
