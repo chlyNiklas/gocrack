@@ -1,16 +1,14 @@
 package solver
 
-import ()
-
-type CheckFunction func([]byte) bool
+import "github.com/chlyniklas/gocrack/checkfunctionfactory"
 
 type Solver struct {
 	// the sample is a byte-slice so that the program has to do less conversions between datatype
 	sample        []byte
-	checkFunction CheckFunction
+	checkFunction checkfunctionfactory.CheckFunction
 }
 
-func New(sample []byte, checkFunction CheckFunction) *Solver {
+func New(sample []byte, checkFunction checkfunctionfactory.CheckFunction) *Solver {
 	return &Solver{
 		sample,
 		checkFunction,

@@ -3,12 +3,12 @@ package pool
 import (
 	"context"
 
-	"github.com/chlyniklas/gocrack/solver"
+	"github.com/chlyniklas/gocrack/checkfunctionfactory"
 )
 
 type Pool struct {
 	charSet       []byte
-	checkFunction solver.CheckFunction
+	checkFunction checkfunctionfactory.CheckFunction
 
 	maxWorkers int
 	blocksize  int

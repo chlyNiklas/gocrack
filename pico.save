@@ -1,0 +1,8 @@
+-blocksize int
+    Set the number of hashes one worker checks before waiting for a new job
+-charset string
+    All characters your password could possibly contain (default "abcdefghijklmnopqrstuvwxyz")
+-hashType string
+    The hash algorithm used to make your hash. You can choose between md5 & sha256 (default "md5")
+-workers int
+    Set the number of go routines that crack

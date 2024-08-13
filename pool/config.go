@@ -4,10 +4,10 @@ import (
 	"errors"
 	"runtime"
 
-	"github.com/chlyniklas/gocrack/solver"
+	"github.com/chlyniklas/gocrack/checkfunctionfactory"
 )
 
-func New(charSet []byte, checkFunction solver.CheckFunction) *Pool {
+func New(charSet []byte, checkFunction checkfunctionfactory.CheckFunction) *Pool {
 	return &Pool{
 		charSet:       charSet,
 		maxWorkers:    runtime.NumCPU() * 3,

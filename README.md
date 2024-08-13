@@ -25,7 +25,8 @@ use following flags:
 -charset string
     All characters your password could possibly contain (default "abcdefghijklmnopqrstuvwxyz")
 -hashType string
-    The hash algorithm used to make your hash. You can choose between md5 & sha256 (default "md5")
+    The hash algorithm used to make your hash.
+    You can choose between: md5, sha1, sha256 & sha512 (default "md5")
 -workers int
     Set the number of go routines that crack
 ```
